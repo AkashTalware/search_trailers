@@ -6,12 +6,18 @@ from django.shortcuts import render, redirect
 import json
 import imdb
 from django.http import HttpResponse, Http404
-
+from pytube import YouTube
+from django.contrib import messages
 # Create your views here.
 
+down_progress = 0
+
+
+
+    
 
 def query_search(request):
-    context = {}
+    context = {} 
     if request.method == 'POST':
 
         url = settings.RAPID_API_BASE_URL_NAME
@@ -73,7 +79,7 @@ def watchTrailer(request):
     #     # print(type(result.json()),result.json()['items'][0]['id']['videoId'])
 
     #     trailerUrl = settings.YOUTUBE_BASE_URL + response.json()['youtube_trailer_key']
-        
+
     #     print(trailerUrl)
     #     context = {
     #         'trailerUrl': trailerUrl,
@@ -106,6 +112,7 @@ def watchTrailer(request):
     try:
         url = settings.RAPID_API_BASE_URL_ID
         querystring = {"type": "get-movie-details", "imdb": imdb}
+
         headers = {
             'x-rapidapi-key': settings.RAPID_API_IMDB_KEY,
             'x-rapidapi-host': settings.RAPID_API_HOST_NAME_ID,
@@ -120,7 +127,30 @@ def watchTrailer(request):
     context = {
         'trailerUrl' : trailerUrl,
         'movieDetails' : response.json(),
-        'movieTitle' : title
+        'movieTitle' : title,
+        'ytID': result.json()['items'][0]['id']['videoId']
     }
 
     return render(request, 'watchTrailer.html', context)
+
+def download(request):
+
+    def download_progress(video, size, progess):
+        # print("===========================================================")
+        # print(progess, video.filesize)
+        # down_progress = ((video.filesize - progess)/video.filesize)*100
+        # print(down_progress)
+        # messages.info(request, down_progress)
+        pass
+
+
+    ytID = request.GET.get('ytID', -1)
+    down_progress = 0
+
+    obj = YouTube("https://www.youtube.com/watch?v=" + ytID, on_progress_callback=download_progress)
+
+    video = obj.streams.get_by_resolution(resolution="720p")
+    print(down_progress)
+    video.download("C:/Users/DELL/Downloads/")
+    
+    return redirect('/')

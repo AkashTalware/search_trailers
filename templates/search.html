@@ -1,24 +1,37 @@
+
 {% extends 'index.html' %}
 
-{% block content %}
 
-<section class="jumbotron text-center">
+{% block content %}
+{% load static %}
+<section class="jumbotron text-center" 
+    style="background-image: url({% static 'Justice_League.jpg' %});
+            background-repeat: no-repeat;
+            background-position: center;">
     <div class="container">
-        <h1 class="jumbotron-heading">Search YouTube</h1>
-        <p class="lead text-muted">Get the top nine results on YouTube for your query!</p>
+        <!-- <h1 class="jumbotron-heading">Type the name of movie</h1> -->
+        <br/><br/>
         <form class="my-2" method="POST">
             <div class="input-group mb-3">
                 {% csrf_token %}
                 <input class="form-control mr-sm-2" 
                 name="search" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" value="search">Search</button>
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit" value="search">Search</button>
             </div>
         </form>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <br/><br/>
     </div>
 </section>
+
+
 <!-- Result -->
-
-
 
 <div class="album py-5 bg-light">
     <div class="container">

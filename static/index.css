@@ -4,7 +4,7 @@ body{
 }
 
 .jumbotron {
-  width: 80%;
+  /* width: 80%; */
   padding-top: 3rem;
   padding-bottom: 3rem;
   margin-bottom: 0;
@@ -22,7 +22,7 @@ body{
 }
 
 .title {
-  color: #39ac31;
+  /* color: #39ac31; */
   font-size: x-large;
   font-weight: 800;
 }
